@@ -19,7 +19,7 @@ void err_quit(const char *msg) {
 		NULL, WSAGetLastError(),
 		//오류메세지 표시 언어 - 사용자 제어판 기본 설정 언어
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		// 오류 문자열 시작주소, nSize, Atguments
+		// 오류 문자열 시작주소, nSize, Arguments
 		(LPTSTR)&lpMsgBuf, 0, NULL);
 	// 메세지 상자 생성 - [오류 메세지 확인]
 	MessageBox(NULL, (LPCTSTR)lpMsgBuf, (LPCTSTR)msg, MB_ICONERROR);
