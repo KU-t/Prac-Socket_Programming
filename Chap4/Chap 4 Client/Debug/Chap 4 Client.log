@@ -1,4 +1,4 @@
-﻿  TCPClient4.cpp
-c:\users\태균\desktop\19-하계\prac-socket_programming\chap4\chap 4 client\tcpclient4.cpp(94): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
-  c:\program files (x86)\windows kits\10\include\10.0.17763.0\um\winsock2.h(1831): note: 'inet_addr' 선언을 참조하십시오.
+﻿  TCPClient6.cpp
+c:\users\태균\desktop\19-하계\prac-socket_programming\chap4\chap 4 client\tcpclient6.cpp(96): warning C4996: 'WSAStringToAddressA': Use WSAStringToAddressW() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\um\winsock2.h(3566): note: 'WSAStringToAddressA' 선언을 참조하십시오.
   Chap 4 Client.vcxproj -> C:\Users\태균\Desktop\19-하계\Prac-Socket_Programming\Chap4\Debug\Chap 4 Client.exe
