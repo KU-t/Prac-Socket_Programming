@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.645
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Char 5 Client method", "Char 5 Client method\Char 5 Client method.vcxproj", "{FFCA50FA-AFCA-4628-ACA9-02FC076AFB7E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FFCA50FA-AFCA-4628-ACA9-02FC076AFB7E}.Debug|x64.ActiveCfg = Debug|x64
+		{FFCA50FA-AFCA-4628-ACA9-02FC076AFB7E}.Debug|x64.Build.0 = Debug|x64
+		{FFCA50FA-AFCA-4628-ACA9-02FC076AFB7E}.Debug|x86.ActiveCfg = Debug|Win32
+		{FFCA50FA-AFCA-4628-ACA9-02FC076AFB7E}.Debug|x86.Build.0 = Debug|Win32
+		{FFCA50FA-AFCA-4628-ACA9-02FC076AFB7E}.Release|x64.ActiveCfg = Release|x64
+		{FFCA50FA-AFCA-4628-ACA9-02FC076AFB7E}.Release|x64.Build.0 = Release|x64
+		{FFCA50FA-AFCA-4628-ACA9-02FC076AFB7E}.Release|x86.ActiveCfg = Release|Win32
+		{FFCA50FA-AFCA-4628-ACA9-02FC076AFB7E}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CEA80947-6663-477D-AE5F-EC1579494D44}
+	EndGlobalSection
+EndGlobal
