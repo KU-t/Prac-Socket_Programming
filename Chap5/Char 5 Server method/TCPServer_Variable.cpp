@@ -11,7 +11,7 @@
 #include <stdlib.h>
 
 #define SERVERPORT 9000
-#define BUFSIZE 512
+#define BUFSIZE 512		// --- Fixed
 
 // 소켓 함수 오류 출력 후 종료 - [프로그램 실행]
 void err_quit(const char *msg) {
@@ -42,9 +42,69 @@ void err_display(const char *msg) {
 		NULL, WSAGetLastError(),
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 		(LPTSTR)&lpMsgBuf, 0, NULL);
-	printf("[%s] %s", msg, (char *)lpMsgBuf);
+	printf("[%s] %s \n", msg, (char *)lpMsgBuf);
 	// 시스템 할당 메모리 반환
 	LocalFree(lpMsgBuf);
+}
+
+// 소켓 수신 버퍼를 한번에 읽고 1 바이트씩 return		// --- variable
+int _recv_ahead(SOCKET s, char *p) {
+	// 쓰레드 관련 함수, 함수가 리턴해도 데이터 유지
+	__declspec(thread) static int nbytes = 0;
+	__declspec(thread) static char buf[1024];
+	__declspec(thread) static char *ptr;
+
+	// 소켓 수신 버퍼에서 읽은 데이터가 없거나 리턴했을 경우,
+	// - 새로 읽어 buf[]에 저장하고, ptr이 맨 앞쪽 바이트를 가리키게 한다.
+	// recv(대상 socket, 보낼 데이터의 버퍼 주소, 보낼 데이터 크기[응용 프로그램 버퍼보다 작아야함], 옵션[대부분 0]) 
+	// - 소켓버퍼에 접근 (수신버퍼) // return : len
+	// : 운영체제 수신 버퍼 -> 데이터 도착 -> 응용 프로그램 버퍼에 복사
+	if (nbytes == 0 || nbytes == SOCKET_ERROR) {
+		nbytes = recv(s, buf, sizeof(buf), 0);
+		if (nbytes == SOCKET_ERROR)
+			return SOCKET_ERROR;
+
+		else if (nbytes == 0)
+			return 0;
+
+		ptr = buf;
+	}
+
+	// 남은 nbytes를 1감소, ptr이 가리키는 데이터를 변수 p가 가리키는 영역에 넣어 리턴
+	--nbytes;
+	*p = *ptr++;
+	return 1;
+}
+
+// 사용자 정의 데이터 수신 함수							// --- variable
+// : '\n'이 나올때까지 데이터 읽기
+// - 소켓 s에서데이터를 1byte씩 읽어 buf가 가리키는 메모리 영역 저장
+// - '\n'이 나오거나 최대 길이(maxlen - 1)이 도달하면 '\n'을 붙여서 리턴
+int recvline(SOCKET s, char *buf, int maxlen) {
+	int n, nbytes;
+	char c, *ptr = buf;
+
+	for (n = 1; n < maxlen; n++) {
+		nbytes = _recv_ahead(s, &c);
+		// 한 문자 넘어오면 저장
+		if (nbytes == 1) {
+			*ptr++ = c;
+			// '\n'이면 데이터 끝
+			if (c == '\n')
+				break;
+		}
+
+		else if (nbytes == 0) {
+			*ptr = 0;
+			return n - 1;
+		}
+
+		else
+			return SOCKET_ERROR;
+	}
+
+	*ptr = 0;
+	return n;
 }
 
 int main(int argc, char* argv[]) {
@@ -62,7 +122,7 @@ int main(int argc, char* argv[]) {
 
 
 	// bind()
-	// socket 주소 구조체 변수 및 초기화
+	// - socket 주소 구조체 변수 및 초기화
 	SOCKADDR_IN serveraddr;
 	ZeroMemory(&serveraddr, sizeof(serveraddr));
 	// - IPv4, 지역 IP, 지역 port
@@ -85,12 +145,12 @@ int main(int argc, char* argv[]) {
 
 
 	// 데이터 통신에 사용할 변수
-	// accept() return값 저장할 소켓, 접속 클라이언트의 주소[IP,port], 주소 길이
+	// - accept() return값 저장할 소켓, 접속 클라이언트의 주소[IP,port], 주소 길이
 	SOCKET client_sock;		// (accept return 인자)
 	SOCKADDR_IN clientaddr; // (accept 두번째 인자)
 	int addrlen;			// (accept 세번째 인자)
 
-	// 클라이언트에게 받은 데이터를 저장할 응용 프로그램 버퍼
+	// 클라이언트에게 받은 데이터를 저장할 응용 프로그램 버퍼 
 	char buf[BUFSIZE + 1];
 
 	// 서버가 클라이언트 요청을 처리해야하기 때문에 무한루프 (정상 종료, 오류발생 전까지)
@@ -111,32 +171,18 @@ int main(int argc, char* argv[]) {
 		// 클라이언트와 데이터 통신
 		while (true) {
 			// 데이터 받기
-			// recv(대상 socket, 보낼 데이터의 버퍼 주소, 보낼 데이터 크기[응용 프로그램 버퍼보다 작아야함], 옵션[대부분 0]) 
-			// - 소켓버퍼에 접근 (수신버퍼) // return : len
-			// : 운영체제 수신 버퍼 -> 데이터 도착 -> 응용 프로그램 버퍼에 복사
-			// 클라이언트에게 받을 데이터의 크기를 모르기때문에 recvn() 이용불가
-			retval = recv(client_sock, buf, BUFSIZE, 0);
+			retval = recvline(client_sock, buf, BUFSIZE + 1);		// --- variable
 
 			if (retval == SOCKET_ERROR) {
-				err_display("recv()");
+				err_display("recvn()");
 				break;
 			}
 			else if (retval == 0)
 				break;
 
 			// 받은 데이터 출력
-			buf[retval] = '\0';
-			printf("[TCP/%s:%d] %s \n", inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port), buf);
-
-			// 데이터 보내기
-			// send(대상 socket, 보낼 데이터의 버퍼 주소, 보낼 데이터 크기, 옵션[대부분 0])
-			// - 소켓버퍼에 접근 (송신버퍼) // return : min = 1, max = len, 0 == 정상 종료
-			// : 응용프로그램 데이터 -> 운영체제 송신버퍼에 복사 -> 데이터 전송
-			retval = send(client_sock, buf, retval, 0);
-			if (retval == SOCKET_ERROR) {
-				err_display("send()");
-				break;
-			}
+			// - 데이터에 \n이 들어가 있음
+			printf("[TCP/%s:%d] %s", inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port), buf);
 		}
 
 		// closesocket()
