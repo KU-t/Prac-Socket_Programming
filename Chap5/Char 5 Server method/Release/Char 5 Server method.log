@@ -1,13 +1,13 @@
-﻿  TCPServer_Variable.cpp
-c:\users\태균\desktop\19-하계\prac-socket_programming\chap5\char 5 server method\tcpserver_variable.cpp(164): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+﻿  TCPserver_FixedVariable.cpp
+c:\users\태균\desktop\19-하계\prac-socket_programming\chap5\char 5 server method\tcpserver_fixedvariable.cpp(141): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
   c:\program files (x86)\windows kits\10\include\10.0.17763.0\um\winsock2.h(1849): note: 'inet_ntoa' 선언을 참조하십시오.
-c:\users\태균\desktop\19-하계\prac-socket_programming\chap5\char 5 server method\tcpserver_variable.cpp(180): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+c:\users\태균\desktop\19-하계\prac-socket_programming\chap5\char 5 server method\tcpserver_fixedvariable.cpp(177): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
   c:\program files (x86)\windows kits\10\include\10.0.17763.0\um\winsock2.h(1849): note: 'inet_ntoa' 선언을 참조하십시오.
-c:\users\태균\desktop\19-하계\prac-socket_programming\chap5\char 5 server method\tcpserver_variable.cpp(185): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+c:\users\태균\desktop\19-하계\prac-socket_programming\chap5\char 5 server method\tcpserver_fixedvariable.cpp(182): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
   c:\program files (x86)\windows kits\10\include\10.0.17763.0\um\winsock2.h(1849): note: 'inet_ntoa' 선언을 참조하십시오.
   코드를 생성하고 있습니다.
-  7 of 8 functions (87.5%) were compiled, the rest were copied from previous compilation.
-    2 functions were new in current compilation
+  2 of 7 functions (28.6%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   Char 5 Server method.vcxproj -> C:\Users\태균\Desktop\19-하계\Prac-Socket_Programming\Chap5\Release\Char 5 Server method.exe

@@ -42,9 +42,40 @@ void err_display(const char *msg) {
 		NULL, WSAGetLastError(),
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 		(LPTSTR)&lpMsgBuf, 0, NULL);
-	printf("[%s] %s", msg, (char *)lpMsgBuf);
+	printf("[%s] %s \n", msg, (char *)lpMsgBuf);
 	// 시스템 할당 메모리 반환
 	LocalFree(lpMsgBuf);
+}
+
+// 사용자 정의 데이터 수신함수
+// recvn()와 recv()의 형태는 동일
+int recvn(SOCKET s, char *buf, int len, int flags) {
+	// 내부적으로 호출하는 recv() 함수의 return값 저장
+	int received;
+	// 응용프로그램 버퍼의 시작주소, 데이터를 읽을 때마다 ptr값 증가
+	char *ptr = buf;
+	// 아직 읽지 않은 데이터의 크기. 데이터를 읽을 때마다 left값 감소
+	int left = len;
+
+	// 읽지않은 데이터가 있으면 계속 읽음
+	while (left > 0) {
+		received = recv(s, ptr, left, flags);
+
+		// 함수 호출에 오류가 있는 경우,
+		if (received == SOCKET_ERROR)
+			return SOCKET_ERROR;
+
+		// recv() 함수의 return값이 0 (정상 종료)일 경우, ( == 전송(접속) 종료)
+		else if (received == 0)
+			break;
+
+		// 변수 갱신
+		left -= received;
+		ptr += received;
+	}
+
+	// 정상적이라면 0
+	return (len - left);
 }
 
 int main(int argc, char* argv[]) {
@@ -92,6 +123,7 @@ int main(int argc, char* argv[]) {
 
 	// 클라이언트에게 받은 데이터를 저장할 응용 프로그램 버퍼
 	char buf[BUFSIZE + 1];
+	int len;
 
 	// 서버가 클라이언트 요청을 처리해야하기 때문에 무한루프 (정상 종료, 오류발생 전까지)
 	while (true) {
@@ -110,15 +142,31 @@ int main(int argc, char* argv[]) {
 
 		// 클라이언트와 데이터 통신
 		while (true) {
+
 			// 데이터 받기
+
 			// recv(대상 socket, 보낼 데이터의 버퍼 주소, 보낼 데이터 크기[응용 프로그램 버퍼보다 작아야함], 옵션[대부분 0]) 
 			// - 소켓버퍼에 접근 (수신버퍼) // return : len
 			// : 운영체제 수신 버퍼 -> 데이터 도착 -> 응용 프로그램 버퍼에 복사
 			// 클라이언트에게 받을 데이터의 크기를 모르기때문에 recvn() 이용불가
-			retval = recv(client_sock, buf, BUFSIZE, 0);
+
+			// - 고정 길이 데이터
+			// 길이 버퍼에 4byte의 길이 데이터 저장 
+			retval = recvn(client_sock, (char *)&len, sizeof(int), 0);
+			
+			if (retval == SOCKET_ERROR) {
+				err_display("recv()[Fixed]");
+				break;
+			}
+			else if (retval == 0)
+				break;
+
+			// - 가변 길이 데이터
+			// 문자열 버퍼에 길이 데이터만큼 문자열 데이터 저장
+			retval = recvn(client_sock, buf, len, 0);
 
 			if (retval == SOCKET_ERROR) {
-				err_display("recv()");
+				err_display("recv()[Variable]");
 				break;
 			}
 			else if (retval == 0)
@@ -127,16 +175,6 @@ int main(int argc, char* argv[]) {
 			// 받은 데이터 출력
 			buf[retval] = '\0';
 			printf("[TCP/%s:%d] %s \n", inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port), buf);
-
-			// 데이터 보내기
-			// send(대상 socket, 보낼 데이터의 버퍼 주소, 보낼 데이터 크기, 옵션[대부분 0])
-			// - 소켓버퍼에 접근 (송신버퍼) // return : min = 1, max = len, 0 == 정상 종료
-			// : 응용프로그램 데이터 -> 운영체제 송신버퍼에 복사 -> 데이터 전송
-			retval = send(client_sock, buf, retval, 0);
-			if (retval == SOCKET_ERROR) {
-				err_display("send()");
-				break;
-			}
 		}
 
 		// closesocket()

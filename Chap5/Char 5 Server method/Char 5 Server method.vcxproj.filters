@@ -24,5 +24,8 @@
     <ClCompile Include="TCPserver_FixedVariable.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="TCPServer_CloseOnTransfer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
