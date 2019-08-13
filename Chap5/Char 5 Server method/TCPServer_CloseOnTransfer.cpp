@@ -158,7 +158,7 @@ int main(int argc, char* argv[]) {
 
 		// closesocket()
 		closesocket(client_sock);
-		printf("[TCP Server] client Disconnect : IP Addr = %s, Port = %d \n", inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
+		printf("\n[TCP Server] client Disconnect : IP Addr = %s, Port = %d \n", inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
 
 	}
 	// closesocket()

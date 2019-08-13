@@ -49,22 +49,13 @@ int main(int argc, char *argv[]) {
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
 		return 1;
 
-	// socket()
-	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (sock == INVALID_SOCKET)
-		err_quit("socket()");
-
-	// connect(서버와 통신을 위한 소켓, 소켓 주소 구조체, 소켓주소 구조체 길이)
-	// - TCP 프로토콜에서 서버와 논리적 연결 설정
 	// 소켓 구조체 초기화 (IP, Port)
 	SOCKADDR_IN serveraddr;
 	ZeroMemory(&serveraddr, sizeof(serveraddr));
 	serveraddr.sin_family = AF_INET;
 	serveraddr.sin_addr.s_addr = inet_addr(SERVERIP);
 	serveraddr.sin_port = htons(SERVERPORT);
-	retval = connect(sock, (SOCKADDR *)&serveraddr, sizeof(serveraddr));
-	if (retval == SOCKET_ERROR)
-		err_quit("connect()");
+	
 
 	// 데이터 통신에 사용할 변수
 	// - 송수신 데이터 저장 버퍼
@@ -75,24 +66,34 @@ int main(int argc, char *argv[]) {
 
 	// 서버와 데이터 통신
 	for (int i = 0; i < 4; i++) {
+
+		// - 한번의 소켓에 한개의 데이터를 전송
+		// socket()
+		SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
+		if (sock == INVALID_SOCKET)
+			err_quit("socket()");
+
+		// connect(서버와 통신을 위한 소켓, 소켓 주소 구조체, 소켓주소 구조체 길이)
+		// - TCP 프로토콜에서 서버와 논리적 연결 설정
+		retval = connect(sock, (SOCKADDR *)&serveraddr, sizeof(serveraddr));
+		if (retval == SOCKET_ERROR)
+			err_quit("connect()");
+
 		// 데이터 입력
-		// - 문자열 데이터를 버퍼에 복사하고 끝에 '\n' 추가
 		len = strlen(testdata[i]);
 		strncpy(buf, testdata[i], len);
-		buf[len++] = '\n';
 
 		// 데이터 보내기
-		// - len은 '\n'이 포함된 문자열 길이
 		retval = send(sock, buf, len, 0);
 		if (retval == SOCKET_ERROR) {
 			err_display("send()");
 			break;
 		}
 		printf("[TCP client] %d Byte - send \n", retval);
-	}
 
-	// closesocket()
-	closesocket(sock);
+		// closesocket()
+		closesocket(sock);
+	}
 
 	// 윈속 종료
 	WSACleanup();
