@@ -1,0 +1,9 @@
+﻿  TCPClient4.cpp
+c:\users\태균\desktop\19-하계\prac-socket_programming\chap6\chap 6 multithread tcp client\tcpclient4.cpp(114): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\태균\desktop\19-하계\prac-socket_programming\chap6\chap 6 multithread tcp client\tcpclient4.cpp(123): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\태균\desktop\19-하계\prac-socket_programming\chap6\chap 6 multithread tcp client\tcpclient4.cpp(94): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\um\winsock2.h(1831): note: 'inet_addr' 선언을 참조하십시오.
+  코드를 생성하고 있습니다.
+  All 7 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
+  Chap 6 MultiThread TCP Client.vcxproj -> C:\Users\태균\Desktop\19-하계\Prac-Socket_Programming\Chap6\x64\Release\Chap 6 MultiThread TCP Client.exe
