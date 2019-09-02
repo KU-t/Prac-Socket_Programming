@@ -1,0 +1,7 @@
+﻿  Chap 7 UDP Client6.cpp
+c:\users\태균\desktop\19-하계\prac-socket_programming\chap7\chap 7 udp client6\chap 7 udp client6.cpp(63): warning C4996: 'WSAStringToAddressA': Use WSAStringToAddressW() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\um\winsock2.h(3566): note: 'WSAStringToAddressA' 선언을 참조하십시오.
+  코드를 생성하고 있습니다.
+  All 6 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
+  Chap 7 UDP Client6.vcxproj -> C:\Users\태균\Desktop\19-하계\Prac-Socket_Programming\Chap7\Release\Chap 7 UDP Client6.exe
