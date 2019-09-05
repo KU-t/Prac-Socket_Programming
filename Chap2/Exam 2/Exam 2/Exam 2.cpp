@@ -21,19 +21,19 @@ int main(int argc, char * argv[]) {
 	WSAData wsa;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
 		return 1;
-	
+
 	MessageBox(NULL, "Winsock Init!", "inform", MB_OK);
 
 	// socket() - socket(주소체계, 소켓타입, 프로토콜) [소켓 생성]
 	// SOCKET TYPE (= socket descriptor) : 32bit 정수 
-	SOCKET tcp_sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (tcp_sock == INVALID_SOCKET)
+	SOCKET udp_sock = socket(AF_INET, SOCK_DGRAM, 0);
+	if (udp_sock == INVALID_SOCKET)
 		err_quit("socket()");
 
-	MessageBox(NULL, "TCP success", "info", MB_OK);
+	MessageBox(NULL, "UDP success", "info", MB_OK);
 
 	// closesocket() - 소켓 닫기
-	closesocket(tcp_sock);
+	closesocket(udp_sock);
 
 	// 윈속 종료
 	WSACleanup();
